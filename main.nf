@@ -33,10 +33,10 @@ process tombo {
     """
         cd /workspace/ieo4032/guppy_yeast_ime4_1_test/fast5/
         for d in */ ; do
-            cd $d
-            ls *.fast5 | parallel -j $cpus mv {} ../
+            cd \$d
+            ls *.fast5 | parallel -j ${task.cpus} mv {} ../
             cd ../
-            rm -r $d
+            rm -r \$d
         done
         tombo resquiggle . /workspace/ieo4032/yeastReferences/yeast_ref.fa --basecall-group Basecall_1D_001 --overwrite --processes ${task.cpus} --fit-global-scale --include-event-stdev --failed-reads-filename "failedReads.txt"
     """
@@ -61,7 +61,7 @@ process nanom6A {
         export PATH=/data/bin:$PATH
         cd /workspace/ieo4032/
         data=/guppy_yeast_ime4_1_test/fast5
-        find $data -name "*.fast5"  >files.txt
+        find \$data -name "*.fast5"  >files.txt
         extract_raw_and_feature_fast --cpu=${task.cpus} --fl=files.txt -o result --clip=10
         predict_sites --cpu 20  -i result -o result_final -r yeastReferences/anno.bed -g yeastReferences/anno.fa
     """
